@@ -1,0 +1,163 @@
+Short description of the API for Slcview.pm
+
+Here is a list of procedures, the options they expect, and what they return.
+This should allow you to use Slcview.pm to roll your own clustergram drawing
+program, if you have a different input file format.  Or, you could use it to
+draw heatmaps or trees for some other purpose.
+
+The full list of procedures discussed below (and which may be requested for
+export) is:
+draw_heatmap
+draw_tree
+draw_labels
+draw_legend
+calculate_scale
+set_options
+colornames
+printcolors
+printfonts
+printgnu
+
+Those procedures automatically exported when you "use Slcview" are:
+draw_heatmap
+draw_tree
+draw_labels
+draw_legend
+set_options
+
+---------------------------------------------------------
+Main clustergram drawing procedure.
+$data is a reference to an array containing clustergram data.
+$rows and $cols tells the procedure what the internal organization of the
+array referenced by $data is.  It expects the array to be read from left to
+right, then top to bottom.  See below for example.
+%options must be set by set_options, see below.
+Returns an image of type Image::Magick.
+
+  sub draw_heatmap
+    my ($data, $rows, $cols, %options) = @_;
+
+Usage:
+  # if your data matrix is:
+  #
+  #   [ 1 2 3 ]
+  #   [ 4 5 6 ]
+  #
+  # then the data array should be (1, 2, 3, 4, 5, 6)
+  # and there are 2 rows and 3 columns
+  @data = (1, 2, 3, 4, 5, 6);
+  %options = (); 
+  %options = set_options(%options);	# see below for set_options
+
+  $heatmap = new Image::Magick;
+  $heatmap = draw_heatmap(\@data, 2, 3, %options);
+
+--------------------------------------------------------
+Main tree drawing procedure.  Draws trees with the root at the left, the leaves
+at the right, with leaves lined up one below the other.
+$data is a reference to an array of the .gtr or .atr file.
+$node_order is a reference to an hash of the GORDER or AORDER field in
+the .cdt file - if there is none, then it is a reference to a hash of the GID
+or AID field in the .cdt file (honestly, I don't see a GORDER or AORDER field
+much, so I'm not sure slcview.pl will handle it properly).
+$xres and $yres tell how big to make the image
+%options must be set by set_options, see below.
+Returns an image of type Image::Magick.
+
+  sub draw_tree
+    my ($data, $node_order, $xres, $yres, %options) = @_;
+
+Usgae:
+  open F, "gtr_file";
+  @gtr = <F>;
+  %gorder = ( ... );	# should be parsed out from the .cdt file
+  %options = ();
+  %options = set_options(%options);	# see below for set_options
+
+  $genetree = new Image::Magick;
+  $genetree = draw_tree(\@gtr, \@gorder, 100, 50, %options);
+
+--------------------------------------------------------
+Main label drawing procedure.  Draws labels left justified, one label below
+the other.
+$labels is a reference to an array containing gene or array labels.
+$xres and $yres tell how big to make the image file for draw_labels.
+The font and font size will be determined from the %options hash.
+Returns an image of type Image::Magick.
+
+  sub draw_labels
+    my ($labels, $xres, $yres, %options) = @_;
+
+Usage:
+  @labels = ("label1", "label2");
+  %options = ();
+  %options = set_options(%options);	# see below for set_options
+  
+  $labelimage = new Image::Magick;
+  $labelimage = draw_labels(\@labels, 100, 200, %options);
+
+--------------------------------------------------------
+Legend drawing procedure.
+$data, $rows, and $cols are the same as for the draw_heatmap procedure.
+draw_legend needs this data again to calculate the color scale.
+$boxnumber is the number of boxes (color gradations) to show in the legend.
+$boxsize is the size in pixels of the boxes to draw in the legend.
+
+  sub draw_legend
+    my ($data, $rows, $cols, $boxnumber, $boxsize, %options) = @_;
+
+Usage:
+  @data = (1, 2, 3, 4, 5, 6);
+  %options = ();
+  %options = set_options(%options);	# see below for set_options
+
+  $legendimage = new Image::Magick;
+  $legendimage = draw_legend(\@data, 2, 3, %options);
+
+--------------------------------------------------------
+Scaling procedure.  $data, $rows, and $cols are as above.  $method is either
+"median" or "mean".  The procedure runs through all the rows, calculating
+the range of the data in each row, then returns the mean or median of the
+ranges as specified.  Slcview.pm defaults to using the median.  This is called
+from within draw_heatmap, and draw_legend.
+
+  sub calculate_scale
+    my ($data, $rows, $cols, $method) = @_;
+
+Usage:
+  @data = (1, 2, 3, 4, 5, 6);
+  $color_range_scale = calculate_scale(\@data, 2, 3, "median");
+
+--------------------------------------------------------
+Procedure to read in the default options in any configuration files, and do
+the proper merging of those with command line options as well as program
+default options.  It should be called before calling any of the drawing
+procedures.  If you are not reading options from the command line, it is
+ok to pass it an empty hash as a parameter.
+
+  sub set_options
+    my (%options) = @_;
+
+Usage:
+  %options = ();
+  %options = set_options (%options);
+
+--------------------------------------------------------
+Procedure to convert all the color formats ('red', '255,0,0', or '#ff0000')
+to a single format used by slcview.pl, namely the '#ff0000' format.
+
+  sub colornames
+    my ($colorname) = @_;
+
+Usage:
+  $color = colornames("red");
+
+--------------------------------------------------------
+Ancillary procedures which print out information.  The program exits at the
+end of these procedures.
+
+  sub printcolors
+
+  sub printfonts
+
+  sub printgnu

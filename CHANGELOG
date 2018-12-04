@@ -1,0 +1,32 @@
+slcview 2.0, 2003-09-15
+  Code reorganization.  Now has Slcview.pm module which allows all the main
+  working procedures to be used by others more easily.
+  New features:
+    Allows specification of default options in system slcview.conf and user
+    .slcviewrc files
+    Does a basic autoscaling of gtrresolution, atrresolution, genelabels, and
+    arraylabels.
+  Other minor algorithm and organization changes.
+
+slcview 1.1.2, 2003-03-16
+  Fixes inconsistencies in color specification parameters.  Tweaked legend
+  file output to no longer cut off labels.
+
+slcview 1.1.1, 2002-03-26
+  Oops.  Was a little premature with releasing the code to draw labels.
+  That created some bugs with not having .atr or .gtr files around.
+  Those should be fixed now, so you can have any combination of +/-
+  gene tree, gene labels, array tree, or array labels.
+
+slcview 1.1, 2002-03-24
+  Now will draw gene labels and array labels.
+  Legend image has been changed from horizontal to vertical, this makes
+  it a little easier to draw labels for all the color shades.
+
+slcview 1.0, 2002-03-21
+  initial version of slcview.pl (v1.0)
+  All options work pretty well.
+  Output is very good, user control over appearance is also pretty good.
+  Left to do:
+    better scale diagram labelling, perhaps more options
+    draw gene and array names on the picture
