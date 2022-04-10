@@ -385,7 +385,7 @@ sub set_options {
   }
 
   # collapse all the various color specification methods into one format
-  foreach $option_key qw(poscolor negcolor absentcolor bgcolor linecolor) {
+  foreach $option_key (qw(poscolor negcolor absentcolor bgcolor linecolor)) {
     $options{$option_key} = colornames($options{$option_key});
     # set to default if invalid color specified
     if ($options{$option_key} eq '-1') {
