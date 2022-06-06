@@ -29,7 +29,7 @@
 use Image::Magick;
 use Slcview;
 use Getopt::Long;
-&Getopt::Long::Configure qw(pass_through);
+&Getopt::Long::Configure("pass_through");
 
 # initialize some variables
 
