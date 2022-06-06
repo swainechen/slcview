@@ -76,7 +76,7 @@ GetOptions (
   'help' => \$printhelp,
   'listcolors|printcolors' => \$printcolors,
   'listfonts|printfonts' => \$printfonts,
-  'listgnu|printgnu' => \$printgnu
+  'gnu|listgnu|printgnu' => \$printgnu
 );
 
 # do help commands first, which will short circuit everything else
