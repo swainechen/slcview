@@ -80,10 +80,10 @@ GetOptions (
 );
 
 # do help commands first, which will short circuit everything else
-if ($printhelp) { &printhelp; }
-if ($printcolors) { &Slcview::printcolors; }
-if ($printfonts) { &Slcview::printfonts; }
-if ($printgnu) { &Slcview::printgnu; }
+if ($printhelp) { &printhelp; exit; }
+if ($printcolors) { &Slcview::printcolors; exit; }
+if ($printfonts) { &Slcview::printfonts; exit; }
+if ($printgnu) { &Slcview::printgnu; exit; }
 
 %options = set_options (%options);
 
