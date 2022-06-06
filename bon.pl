@@ -63,7 +63,7 @@ GetOptions (
   'help' => \$printhelp,
   'listcolors|printcolors' => \$printcolors,
   'listfonts|printfonts' => \$printfonts,
-  'listgnu|printgnu' => \$printgnu,
+  'gnu|listgnu|printgnu' => \$printgnu,
   'debug' => \$debug
 );
 
